@@ -8,6 +8,7 @@ import {
 } from "@pinecone-database/doc-splitter";
 import { getEmbeddings } from "./embeddings";
 import { convertToAscii } from "./utils";
+import { downloadFromAzure } from "./azure-server";
 
 export const getPineconeClient = () => {
   return new Pinecone({
@@ -25,10 +26,10 @@ type PDFPage = {
 
 export async function loadS3IntoPinecone(fileKey: string) {
   // 1. obtain the pdf -> downlaod and read from pdf
-  console.log("downloading s3 into file system");
-  const file_name = await downloadFromS3(fileKey);
+  console.log("downloading azure into file system");
+  const file_name = await downloadFromAzure(fileKey);
   if (!file_name) {
-    throw new Error("could not download from s3");
+    throw new Error("could not download from azure");
   }
   console.log("loading pdf into memory" + file_name);
   const loader = new PDFLoader(file_name);
